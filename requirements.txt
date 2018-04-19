@@ -1,0 +1,7 @@
+numpy
+scipy
+magpie
+flask
+wtforms
+sklearn
+pandas

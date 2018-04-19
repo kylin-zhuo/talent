@@ -1,0 +1,56 @@
+<script type="text/javascript" src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+
+
+<style media="screen">
+form textarea#description {
+   width: 600px;
+   height: 200px;
+   max-width: 600px;
+}
+</style>
+
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<p><b>Input the Job description/Skills/Titles:</b></p>
+<p>When input skills or titles, seperate with commas.</p>
+
+<form method="POST">
+  {{ form.hidden_tag() }}
+  {{ form.description() }} <br>
+  {{ form.options() }}
+  {{ form.submit() }}
+</form>
+<hr>
+
+
+{% if result or talents %}
+
+<div style="float:left;width:40%;">
+  <p><b>Mostly wanted skills:</b></p>
+  <ul style="font: 12px">
+    {% for item in required_skills %} 
+      <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+
+</div>
+
+<div style="float:right;width:50%;">
+  
+  <p><b>Recommended Talents:</b></p>
+  <ul style="font: 12px">
+    {% for t in talents　 %} 
+      <li>{{ t[0] }}</li>
+    {% endfor %}
+  </ul>
+
+</div>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

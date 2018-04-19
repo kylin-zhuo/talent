@@ -1,0 +1,63 @@
+<script type="text/javascript" src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+
+<style media="screen">
+form textarea#companyName {
+   width: 600px;
+   height: 200px;
+   max-width: 600px;
+}
+</style>
+
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<form method="POST">
+  {{ form.hidden_tag() }}
+  <b>Input the text (A company name or a description): </b><br>
+  {{ form.companyName() }} <br>
+  {{ form.checkbox.label }}
+  {{ form.checkbox() }}
+  <br>
+  {{ form.submit() }}
+</form>
+
+<hr>
+
+<div>
+
+{% if result %}
+
+<div id="chart4" class="chart" style="height: 340px; width: 76%; margin-left: auto; margin-right: auto; margin-top: 5px"></div>
+<script type="text/javascript">
+
+$("#chart4").highcharts({
+  chart: {type: 'column'},
+  title: {text: 'The recommended companies'},
+  xAxis: {
+    type: 'category',
+    labels: {
+      rotation: -45,
+      style: {
+        fontSize: '12px'
+      }
+    }
+  },
+  yAxis: {
+    min: 0,
+    title: {text: "Similarity"}
+  },
+  legend: {enabled: false},
+  series: [{
+    name: 'Relevance',
+    data: {{ result|safe }}
+  }]
+});
+</script>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

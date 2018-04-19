@@ -1,0 +1,53 @@
+<script type="text/javascript" src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<p>Input the title(s) (separate with comma):</p>
+
+<form method="POST">
+  {{ form.hidden_tag() }}
+  {{ form.title.label }} {{ form.title() }}
+  {{ form.submit() }}
+</form>
+
+<hr>
+
+<div>
+
+{% if result %}
+
+<div id="chart2" class="chart" style="height: 420px; width: 76%; margin-left: auto; margin-right: auto; margin-top: 5px"></div>
+<script type="text/javascript">
+
+$("#chart2").highcharts({
+  chart: {type: 'column'},
+  title: {text: 'The titles most related'},
+  xAxis: {
+    type: 'category',
+    labels: {
+      rotation: -45,
+      style: {
+        fontSize: '12px'
+      }
+    }
+  },
+  yAxis: {
+    min: 0,
+    title: {text: "Relevance"}
+  },
+  legend: {enabled: false},
+  series: [{
+    name: 'Relevance',
+    data: {{ result|safe }}
+  }]
+});
+</script>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

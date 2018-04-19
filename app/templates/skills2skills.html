@@ -1,0 +1,56 @@
+<script type="text/javascript" src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<p>Input the skill(s) (separate with comma): </p>
+
+<form method="POST">
+  {{ form.hidden_tag() }}
+  {{ form.skill.label }} {{ form.skill() }}
+  {{ form.submit() }}
+</form>
+<hr>
+
+<div>
+{% if result %}
+
+<div id="chart1" class="chart" style="height: 420px; width: 76%; margin-left: auto; margin-right: auto; margin-top: 5px"></div>
+<script type="text/javascript">
+
+// var skills = {{ input_text|safe }}
+var title = 'The skills most related ' 
+
+$("#chart1").highcharts({
+  chart: {type: 'column'},
+  title: {text: title},
+  xAxis: {
+    type: 'category',
+    labels: {
+      rotation: -45,
+      style: {
+        fontSize: '12px'
+      }
+    }
+  },
+  yAxis: {
+    min: 0,
+    title: {text: "Relevance"}
+  },
+  legend: {enabled: false},
+  series: [{
+    name: 'Relevance',
+    // data: [['a', 5], ['b', 4], ['c',6]],
+    data: {{ result|safe }}
+  }]
+});
+</script>
+
+
+{% endif %}
+
+</div>
+
+{% endblock %}

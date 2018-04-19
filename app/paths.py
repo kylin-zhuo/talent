@@ -1,0 +1,13 @@
+PATH_TALENT1 = "../data/talent_full_profile_json_1.json"
+PATH_TALENT2 = "../data/talent_full_profile_json_2.json"
+PATH_TEST = "../data/talent_full_profile_json_test.json"
+PATH_JOBS = "../data/Job_description_10k.csv"
+PATH_COMPANIES = "../data/company_50k.csv"
+WRITE_SK_CAT_PATH = "../data/sk-categories/"
+SAVE_MAGPIE_WORD2VEC_PATH = '../model/embeddings/sk'
+SAVE_MAGPIE_SCALER_PATH = '../model/scalers/sk'
+SAVE_MAGPIE_MODEL_PATH = '../model/models/sk.h5'
+SAVE_COMPANY_MODEL_PATH = '../model/company.pkl'
+SAVE_MODEL_PATH = "../model/model.pkl"
+VEC_DIM = 100
+EPOCHS = 50
