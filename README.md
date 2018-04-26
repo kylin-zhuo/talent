@@ -2,7 +2,7 @@
 
 1) Find skills from skills
 
-Calculate the ooccurrences of each pair of skills using the tanlents' profiles, for a certain skill, recommend the skills that have high occurrence with it.
+Calculate the cooccurrences of each pair of skills using the tanlents' profiles, for a certain skill, recommend the skills that have high occurrence with it.
 
 2) Find titles from titles
 
@@ -12,7 +12,7 @@ Extract the feature of a title using its corresponding skills. Define a similari
 
 Straightforwardly take the most frequent skills associated with a title.
 
-4) Recomment talents from skills/titiles/job description
+4) Recommend talents from skills/titles/job description
 
 (a) from description: Train a multi-class text classification model and predict the probabilities of skills as classes of each description text. Following step will be (c).
 
@@ -20,9 +20,9 @@ Straightforwardly take the most frequent skills associated with a title.
 
 (c) Generate the talent profiles which contain their skills. Find the most similar talents given a certain set of skills.
 
-5) Comanpy information
+5) Company information
 
-Extract the TF-IDF vectors from the description of each company as its feature. Recommend based on cosine similarity of the feauture. P.S. the calculation can take seconds. 
+Extract the TF-IDF vectors from the description of each company as its feature. Recommend based on cosine similarity of the feature. P.S. the calculation can take seconds.
 
 -----
 #Run the program
