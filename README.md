@@ -1,4 +1,4 @@
-#Explanation of solution
+# Explanation of solution
 
 1) Find skills from skills
 
@@ -25,7 +25,7 @@ Straightforwardly take the most frequent skills associated with a title.
 Extract the TF-IDF vectors from the description of each company as its feature. Recommend based on cosine similarity of the feature. P.S. the calculation can take seconds.
 
 -----
-#Run the program
+# Run the program
 
 pip install -r requirements.txt
 cd app/
