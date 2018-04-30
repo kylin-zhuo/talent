@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, redirect
 from flask.ext.wtf import Form
-from wtforms import StringField, SubmitField, TextAreaField, RadioField, BooleanField, validators
+from wtforms import StringField, SelectField, SubmitField, TextAreaField, RadioField, BooleanField, validators
 from wtforms.validators import Required
 import pickle
 from utils import *
@@ -10,6 +10,7 @@ from company import Company
 
 
 app = Flask(__name__)
+# To avoid the CSRF attck, set secret key
 app.config['SECRET_KEY'] = 'Set key'
 
 
@@ -45,11 +46,14 @@ def train():
 
 def load():
     model = pickle.load(open(SAVE_MODEL_PATH, "rb"))
-    company = pickle.load(open(SAVE_COMPANY_MODEL_PATH, "rb"))
+    # company = pickle.load(open(SAVE_COMPANY_MODEL_PATH, "rb"))
+    company = None
     magpie = load_magpie(labels=model.skills_to_select)
     return model, company, magpie
 
+# train()
 model, company, magpie = load()
+# generate_sk_categories(model.job_profiles)
 
 
 ## ------------------------------
@@ -62,6 +66,7 @@ def skills2skills():
     form = skillForm()
     result = None
     input_text = None
+    # form.choice.choices = [(s,s) for s in sorted(model.skills_to_select)]
 
     if form.validate_on_submit():
         input_text = str(form.skill.data)
@@ -70,6 +75,7 @@ def skills2skills():
         skills = [s.strip().lower() for s in skills]
         result = model.recommend_skills_from_skills(skills)
         result = [[str(k), int(v)] for k,v in result]
+        # print(result)
 
     return render_template('skills2skills.html', result=result, form=form, input_text=input_text)
 

@@ -1,7 +1,7 @@
 import pandas as pd
 from paths import *
-import scipy as sp  
-import numpy as np   
+import scipy as sp
+import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 import math
 import pickle
@@ -15,7 +15,7 @@ class Company(object):
 		self.comp = pd.read_csv(PATH_COMPANIES)
 		# np.sum(comp.isnull())
 		self.comp.dropna(subset=['company_name', 'company_description'], inplace=True)
-		# remove duplicated company names 
+		# remove duplicated company names
 		self.comp.drop_duplicates(subset=['company_name'], inplace=True)
 		# index the company
 
@@ -46,16 +46,14 @@ class Company(object):
 		sims = self.company_vectors.dot(vec).ravel()
 		idxs = sims.argsort()[-k-1:-1]
 		return [[str(self.index2comp[i]), sims[i]] for i in idxs[::-1]]
-		
+
 	def train(self):
 		self.read()
 		self.generate_index()
 		self.compute()
-		self.comp = None
+		self.comp = None # save space
 		print("Company model trained.")
 
 	def save(self):
 		pickle.dump(self, open(SAVE_COMPANY_MODEL_PATH, "wb"))
 		print("Company model saved to %s." % SAVE_COMPANY_MODEL_PATH)
-
-

@@ -25,6 +25,20 @@ class Model(object):
         self.titles_to_select = []
         self.title_skills = None # to dump
 
+    def get_short_profile(self, js):
+        # self-defined method for extacting partial information from a talent profile
+        basic = js['basic']
+        uid = str(basic['id'])
+        fullname = basic['fullname']
+        age = basic['age']
+        email = basic['email']
+        skills = [str(s).lower().strip() for s in basic['skill']] 
+        image_url = basic['image_url']
+        linkedin_url = basic['linkedin_url']
+        location = basic['location']
+        education = js['education']
+        return {'basic': basic, 'skills': skills, 'education': education}
+
     def read_talent_skill_profiles(self):
         self.n_candidates = 0
         for path in self.paths_talents:
@@ -33,17 +47,19 @@ class Model(object):
                     js = json.loads(line, encoding="utf8")
                     dic = dict(js)
                     try:
-                        sk = dic['basic']['skill']
-                        sk = [str(s).lower().strip() for s in sk]
-                        uid = str(dic['basic']['id'])
-                        fullname = str(dic['basic']['fullname'])
-                        self.talent_skill_profiles.append((uid, fullname, sk))
+                        # sk = dic['basic']['skill']
+                        # sk = [str(s).lower().strip() for s in sk] 
+                        # uid = str(dic['basic']['id'])
+                        # fullname = str(dic['basic']['fullname'])
+                        # self.talent_skill_profiles.append((uid, fullname, sk))
+                        self.talent_skill_profiles.append(self.get_short_profile(dic))
                         self.n_candidates += 1
                     except:
                         self.n_bad_records += 1
                         continue
         print("Extracted %d candidates' skills. Bad records: %d" % (self.n_candidates, self.n_bad_records))
-        self.skill_profiles = [u[2] for u in self.talent_skill_profiles]
+        self.skill_profiles = [u['skills'] for u in self.talent_skill_profiles]
+        print("Length of skill profiles: %d" % len(self.skill_profiles))
 
     def read_job_profiles(self):
         self.job_profiles = pd.read_csv(self.path_job, error_bad_lines=False, header=None)
@@ -191,9 +207,10 @@ class Model(object):
         for i in range(len(self.talent_skill_profiles)):
             try:
                 prof = self.talent_skill_profiles[i]
-                sim = jaccard_similarity(skills, prof[2])
-                name = prof[1]
-                scores.append([name, sim])
+                sim = jaccard_similarity(skills, prof['skills'])
+                # name = prof['basic']['fullname']
+                # scores.append([name, sim])
+                scores.append([prof, sim])
             except:
                 print("Error in %d" % i)
         scores.sort(key=lambda x:-x[1])

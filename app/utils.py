@@ -10,9 +10,9 @@ import math
 
 def count_cos_similarity(vec_1, vec_2):
     if len(vec_1) != len(vec_2):
+        print("Different lengths of two vectors.")
         return 0
-
-    s = sum(vec_1[i] * vec_2[i] for i in range(len(vec_2)))
+    s = sum(vec_1[i] * vec_2[i] for i in range(len(vec_2))) * 1.0
     den1 = math.sqrt(sum([pow(number, 2) for number in vec_1]))
     den2 = math.sqrt(sum([pow(number, 2) for number in vec_2]))
     return s / (den1 * den2)
@@ -29,21 +29,53 @@ def jaccard_similarity(arr1, arr2):
 
 
 def parse_to_skills(input_text):
-    # the most basic version: just split with comma
+    # the most basic approach: only split by commas
     skills = input_text.split(',')
     skills = [str(s).strip().lower() for s in skills]
     return skills
 
 def parse_to_titles(input_text):
+    # the most basic approach: only split by commas
     titles = input_text.split(',')
     titles = [str(s).strip().lower() for s in titles]
     return titles
+
+def parse_skill_string(string, excludings=['\\n', '\\N']):
+    try:
+        skills = string.split('\xc2\xb7')
+        skills = chain(*[s.split('&') for s in skills])
+        skills = [s.strip() for s in skills]
+        skills = [s.lower() for s in skills if s not in excludings]
+        return skills
+    except:
+        return []
 
 # def train_model():
 #     model = Model()
 #     model.train()
 #     pickle.dump(mode, open(SAVE_MODEL_PATH, "wb"))
 #     print("Trained and persisted to")
+
+def generate_sk_categories(jobs, path=WRITE_SK_CAT_PATH, desc_thres=50):
+    count = 0
+    for i in range(len(jobs)):
+        col_skill = jobs.iloc[i]['skills']
+        col_description = jobs.iloc[i]['description']
+        try:
+            skills = parse_skill_string(col_skill)
+        except:
+            count += 1
+            continue
+        if skills and len(str(col_description)) > desc_thres:
+            try:
+                with open("%s%d.lab" % (path, i), "wb") as f:
+                    f.write("\n".join(skills))
+                with open("%s%d.txt" % (path, i), "wb") as f:
+                    f.write(col_description)
+            except:
+                count += 1
+                pass
+    print("%d done, %d failed." % (len(jobs)-count, count))
 
 
 def train_magpie(labels):
@@ -68,15 +100,7 @@ def load_magpie(labels):
     )
     return magpie
 
-def parse_skill_string(string, excludings=['\\n', '\\N']):
-    try:
-        skills = string.split('\xc2\xb7')
-        skills = chain(*[s.split('&') for s in skills])
-        skills = [s.strip() for s in skills]
-        skills = [s for s in skills if s not in excludings]
-        return skills
-    except:
-        return []
+
 
 def get_skills_from_job_descriptions(jobs, excludings=['\\n', '\\N']):
     skills = []

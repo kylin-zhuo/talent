@@ -8,6 +8,7 @@ form textarea#description {
    height: 200px;
    max-width: 600px;
 }
+
 </style>
 
 {% extends 'layout.html' %}
@@ -28,24 +29,56 @@ form textarea#description {
 
 {% if result or talents %}
 
-<div style="float:left;width:40%;">
+<div>
   <p><b>Mostly wanted skills:</b></p>
-  <ul style="font: 12px">
-    {% for item in required_skills %} 
-      <li>{{ item }}</li>
-    {% endfor %}
-  </ul>
-
+  {% for item in required_skills %} 
+  <a>{{ item }} </a> &nbsp; / &nbsp;
+  {% endfor %}
 </div>
 
-<div style="float:right;width:50%;">
+<hr>
+<div>
   
   <p><b>Recommended Talents:</b></p>
-  <ul style="font: 12px">
-    {% for t in talents　 %} 
-      <li>{{ t[0] }}</li>
+
+  <table>
+    
+    {% for t in talents %} 
+
+<!--     <tr>
+      <td width="20%"><img src="{{t[0]['basic']['image_url']}}" width="18%"></td>
+      <td width="20%">/td>
+    </tr> -->
+
+      <tbody>
+        <tr>
+            <th rowspan="5" width="25%"><img src="{{t[0]['basic']['image_url']}}" width="90%"></th>
+            <th colspan="2" width="75%">{{ t[0]['basic']['fullname'] }}</th>
+        </tr>
+        <tr>
+            <td width="30%">Age: {{t[0]['basic']['age']}}</td>
+            <td>E-mail: <a>{{t[0]['basic']['email']}}</a></td>
+        </tr>
+        <tr>
+          <td>Experience: {{t[0]['basic']['experience']}}</td>
+          <td>Location: {{t[0]['basic']['location']}} </td>
+        </tr>
+        <tr>
+          <td>Education: {{ t[0]['basic']['education']}}</td>
+          <td>Focus: {% for s in t[0]['basic']['focus'] %}{{s}}/{% endfor %}</td>
+        </tr>
+        <tr>
+          <td>Title: {{ t[0]['basic']['title']}} </td>
+          <td>Skills: {% for s in t[0]['skills']%}{{s}}/{% endfor %}</td>
+        </tr>
+    </tbody>
+
     {% endfor %}
-  </ul>
+  </table>
+
+
+
+  
 
 </div>
 
